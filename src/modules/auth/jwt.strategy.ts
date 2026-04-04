@@ -12,5 +12,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       secretOrKey: config.get<string>('JWT_ACCESS_SECRET') || 'dev_secret',
     })
   }
-  async validate(payload: any) { return payload }
+
+  async validate(payload: any) {
+    return {
+      sub: payload.sub,
+      mobileNumber: payload.mobileNumber,
+      role: payload.role,
+      name: payload.name,
+    }
+  }
 }

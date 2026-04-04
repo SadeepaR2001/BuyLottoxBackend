@@ -11,6 +11,9 @@
     "prisma:studio": "prisma studio",
     "db:seed": "ts-node prisma/seed.ts"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "dependencies": {
     "@nestjs/common": "^10.4.8",
     "@nestjs/config": "^3.3.0",
@@ -19,6 +22,7 @@
     "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^10.4.8",
     "@prisma/client": "^5.19.1",
+    "axios": "^1.14.0",
     "bcrypt": "^5.1.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
@@ -30,10 +34,10 @@
   "devDependencies": {
     "@nestjs/cli": "^10.4.2",
     "@types/bcrypt": "^5.0.2",
-    "@types/node": "^20.14.10",
+    "@types/node": "^20.19.37",
     "@types/passport-jwt": "^4.0.1",
     "prisma": "^5.19.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.4"
+    "typescript": "^5.9.3"
   }
 }
