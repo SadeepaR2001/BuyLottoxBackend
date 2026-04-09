@@ -16,24 +16,40 @@ exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
 const auth_service_1 = require("./auth.service");
 const jwt_auth_guard_1 = require("./jwt-auth.guard");
+const forgot_password_send_otp_dto_1 = require("./dto/forgot-password-send-otp.dto");
+const verify_forgot_password_otp_dto_1 = require("./dto/verify-forgot-password-otp.dto");
+const reset_password_dto_1 = require("./dto/reset-password.dto");
+const resend_otp_dto_1 = require("./dto/resend-otp.dto");
 let AuthController = class AuthController {
-    constructor(auth) {
-        this.auth = auth;
+    constructor(authService) {
+        this.authService = authService;
     }
     register(body) {
-        return this.auth.register(body.name, body.mobileNumber, body.password);
+        return this.authService.register(body.name, body.mobileNumber, body.password);
     }
     login(body) {
-        return this.auth.login(body.mobileNumber, body.password);
+        return this.authService.login(body.mobileNumber, body.password);
     }
     sendOtp(body) {
-        return this.auth.sendOtp(body.mobileNumber);
+        return this.authService.sendOtp(body.mobileNumber);
     }
     verifyOtp(body) {
-        return this.auth.verifyOtp(body.mobileNumber, body.otp);
+        return this.authService.verifyOtp(body.mobileNumber, body.otp);
     }
     me(req) {
-        return this.auth.me(req.user.userId);
+        return this.authService.me(req.user.userId);
+    }
+    sendForgotPasswordOtp(dto) {
+        return this.authService.sendForgotPasswordOtp(dto.mobileNumber);
+    }
+    verifyForgotPasswordOtp(dto) {
+        return this.authService.verifyForgotPasswordOtp(dto.mobileNumber, dto.code);
+    }
+    resetPassword(dto) {
+        return this.authService.resetPassword(dto.mobileNumber, dto.code, dto.newPassword);
+    }
+    resendOtp(dto) {
+        return this.authService.resendOtp(dto.mobileNumber);
     }
 };
 exports.AuthController = AuthController;
@@ -73,6 +89,35 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "me", null);
+__decorate([
+    (0, common_1.Post)('forgot-password/send-otp'),
+    (0, common_1.Post)('forgot-password/send-otp'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [forgot_password_send_otp_dto_1.ForgotPasswordSendOtpDto]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "sendForgotPasswordOtp", null);
+__decorate([
+    (0, common_1.Post)('forgot-password/verify-otp'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [verify_forgot_password_otp_dto_1.VerifyForgotPasswordOtpDto]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "verifyForgotPasswordOtp", null);
+__decorate([
+    (0, common_1.Post)('forgot-password/reset'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [reset_password_dto_1.ResetPasswordDto]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "resetPassword", null);
+__decorate([
+    (0, common_1.Post)('resend-otp'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [resend_otp_dto_1.ResendOtpDto]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "resendOtp", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService])

@@ -1,7 +1,11 @@
 import { AuthService } from './auth.service';
+import { ForgotPasswordSendOtpDto } from './dto/forgot-password-send-otp.dto';
+import { VerifyForgotPasswordOtpDto } from './dto/verify-forgot-password-otp.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
+import { ResendOtpDto } from './dto/resend-otp.dto';
 export declare class AuthController {
-    private readonly auth;
-    constructor(auth: AuthService);
+    private readonly authService;
+    constructor(authService: AuthService);
     register(body: {
         name: string;
         mobileNumber: string;
@@ -33,6 +37,7 @@ export declare class AuthController {
         mobileNumber: string;
     }): Promise<{
         message: string;
+        expiresAt: Date;
     }>;
     verifyOtp(body: {
         mobileNumber: string;
@@ -47,5 +52,17 @@ export declare class AuthController {
         role: import(".prisma/client").$Enums.Role;
         status: import(".prisma/client").$Enums.UserStatus;
         createdAt: Date;
+    }>;
+    sendForgotPasswordOtp(dto: ForgotPasswordSendOtpDto): Promise<{
+        message: string;
+    }>;
+    verifyForgotPasswordOtp(dto: VerifyForgotPasswordOtpDto): Promise<{
+        message: string;
+    }>;
+    resetPassword(dto: ResetPasswordDto): Promise<{
+        message: string;
+    }>;
+    resendOtp(dto: ResendOtpDto): Promise<{
+        message: string;
     }>;
 }

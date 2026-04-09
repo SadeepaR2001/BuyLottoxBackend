@@ -21,16 +21,24 @@ let SmsService = class SmsService {
         const baseUrl = this.config.get('FITSMS_API_BASE_URL');
         const token = this.config.get('FITSMS_API_TOKEN');
         const senderId = this.config.get('FITSMS_SENDER_ID') || 'BuyLottoX';
+        if (!baseUrl) {
+            throw new common_1.InternalServerErrorException('FITSMS_API_BASE_URL is missing in .env');
+        }
+        if (!token) {
+            throw new common_1.InternalServerErrorException('FITSMS_API_TOKEN is missing in .env');
+        }
         const normalized = this.normalizeSriLankanNumber(mobileNumber);
+        const finalUrl = `${baseUrl.replace(/\/$/, '')}/sms/send`;
         try {
             const payload = {
                 sender_id: senderId,
                 recipient: normalized,
                 message,
             };
-            console.log('FITSMS URL:', `${baseUrl}/sms/send`);
+            console.log('FITSMS API BASE URL:', baseUrl);
+            console.log('FITSMS final URL:', finalUrl);
             console.log('FITSMS payload:', payload);
-            const response = await axios_1.default.post(`${baseUrl}/sms/send`, payload, {
+            const response = await axios_1.default.post(finalUrl, payload, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     Accept: 'application/json',
@@ -49,15 +57,22 @@ let SmsService = class SmsService {
             console.error('FITSMS send failed status:', error?.response?.status);
             console.error('FITSMS send failed data:', error?.response?.data);
             console.error('FITSMS send failed message:', error?.message);
-            throw new common_1.InternalServerErrorException(error?.response?.data?.message || error?.message || 'Failed to send OTP SMS');
+            throw new common_1.InternalServerErrorException(error?.response?.data?.message ||
+                error?.message ||
+                'Failed to send OTP SMS');
         }
     }
     normalizeSriLankanNumber(input) {
         const raw = input.replace(/\D/g, '');
-        if (raw.startsWith('94') && raw.length === 11)
+        if (raw.startsWith('94') && raw.length === 11) {
             return raw;
-        if (raw.startsWith('0') && raw.length === 10)
+        }
+        if (raw.startsWith('0') && raw.length === 10) {
             return `94${raw.slice(1)}`;
+        }
+        if (raw.length === 9) {
+            return `94${raw}`;
+        }
         return raw;
     }
 };
